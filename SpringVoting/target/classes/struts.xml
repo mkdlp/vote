@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="false" />
+	
+	<constant name="struts.objectFactory" value="spring" />
+	
+    <package name="default" namespace="/" extends="struts-default">
+    
+    	<interceptors>
+			<interceptor name="loginInterceptor" class="com.lp.vote.web.interceptor.LoginInterceptor"/>    	
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="loginInterceptor">
+					<param name="includeMethods">vote,save</param>
+				</interceptor-ref>
+			</interceptor-stack>
+    	</interceptors>
+    	
+    	<global-results>
+    		<result name="login" type="redirect">/login.jsp</result>
+    	</global-results>
+    	
+		<action name="*_*" class="{1}Action" method="{2}">
+			<interceptor-ref name="myStack"/>
+			<result name="list">/manage.jsp</result>
+			<result name="view">/view.jsp</result>
+			<result name="vote">/vote.jsp</result>
+			<result name="loginSuccess">/manage.jsp</result>
+			<result name="saveSuccess">/manage.jsp</result>
+		</action>
+		
+    </package>
+</struts>
